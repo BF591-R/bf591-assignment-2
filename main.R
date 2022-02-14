@@ -162,12 +162,12 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
 #' converting the _wide_ format of the input tibble to a _long_ format.
 #'
 #' @examples `p <- plot_ggplot(plot_tibble)`
-plot_ggplot <- function(tibble) {
-  tibble %>% pivot_longer(starts_with('GSM'), names_to = 'sample') -> tibble
-  tibble$hgnc_symbol <- factor(tibble$hgnc_symbol,
-                            levels = unique(tibble$hgnc_symbol), 
+plot_ggplot <- function(input_tibble) {
+  input_tibble %>% pivot_longer(starts_with('GSM'), names_to = 'sample') -> input_tibble
+  input_tibble$hgnc_symbol <- factor(input_tibble$hgnc_symbol,
+                            levels = unique(input_tibble$hgnc_symbol), 
                             ordered = TRUE)
-  p <- ggplot(tibble, aes(x=hgnc_symbol, y=value)) +
+  p <- ggplot(input_tibble, aes(x=hgnc_symbol, y=value)) +
     geom_boxplot(aes(fill = gene_set)) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
