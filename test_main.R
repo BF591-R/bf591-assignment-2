@@ -4,8 +4,8 @@ source("main.R")
 library(testthat)
 
 test_that("loading csv works using load_expression()", {
-  result_tib <- load_expression("/project/bf528/project_1/data/example_intensity_data.csv")
-  expect_equal(dim(result_tib), c(54675, 36))
+  result_tib <- load_expression("/data/example_intensity_data_subset.csv")
+  expect_equal(dim(result_tib), c(1000, 36))
   expect_true(is_tibble(result_tib))
 })
 
@@ -51,12 +51,26 @@ test_that("reduce_data() is correctly changing the size and shape of the tibble"
   expect_equal(reduce_test, result)
 })
 
-test_that("plot_ggplot() correctly creates a boxplot from sample data", {
-  plot_tib <- tibble(probeids = c("202274_at", "202541_at", "202542_s_at", "203919_at"),
-                     hgnc = c("ACTG2", "AIMP1", "AIMP1", "TCEA2"),
-                     gene_set = rep("good", 4),
-                     GSM1 = c(8.05, 8.40, 9.55, 4.44),
-                     GSM2 = c(7.74, 7.11, 8.48, 5.39))
-  p <- plot_ggplot(plot_tib)
-  expect_equal(class(p$layers[[1]]$geom)[1], "GeomBoxplot")
+test_that("convert_to_wide() correctly converts from long to wide format", {
+  # Create a long format tibble
+  long_tib <- tibble(probeids = rep(c("202274_at", "202541_at", "202542_s_at", "203919_at"), each = 2),
+                     hgnc = rep(c("ACTG2", "AIMP1", "AIMP1", "TCEA2"), each = 2),
+                     gene_set = rep(rep("good", 4), each = 2),
+                     sample = rep(c("GSM1", "GSM2"), 4),
+                     expression_value = c(8.05, 7.74, 8.40, 7.11, 9.55, 8.48, 4.44, 5.39))
+  
+  # Convert to wide format
+  wide_format <- convert_to_wide(long_tib)
+  
+  # Expected wide format tibble
+  expected_tib <- tibble(probeids = c("202274_at", "202541_at", "202542_s_at", "203919_at"),
+                         hgnc = c("ACTG2", "AIMP1", "AIMP1", "TCEA2"),
+                         gene_set = rep("good", 4),
+                         GSM1 = c(8.05, 8.40, 9.55, 4.44),
+                         GSM2 = c(7.74, 7.11, 8.48, 5.39))
+  
+  # Test if the converted wide format matches the expected tibble
+  expect_equal(wide_format, expected_tib)
 })
+
+

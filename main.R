@@ -120,18 +120,27 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
   return(NULL)
 }
 
-#' Plot a boxplot of good and bad genes.
+#' Convert the tibble from long to wide format.
 #'
-#' @param tibble A reduced tibble of expression data, with information about
-#' good and bad genes and gene names.
+#' @param tibble A tibble of expression data in long format with information about
+#' good and bad genes, gene names, sample names, and expression values.
 #'
-#' @return A ggplot object which contains a boxplot of the genes and samples we 
-#' are interested in.
-#' 
-#' @details This function performs one additional step before using `ggplot()`: 
-#' converting the _wide_ format of the input tibble to a _long_ format.
+#' @return A tibble in wide format.
 #'
-#' @examples `p <- plot_ggplot(plot_tibble)`
-plot_ggplot <- function(tibble) {
-  return(NULL)
+#' @details This function's primary objective is to reformat the tibble from a 
+#' long format, where there are separate columns for sample name and expression value, 
+#' to a wide format, where each column represents a sample.
+#'
+#' @examples 
+#' # Assuming 'long_data' is your long-format tibble
+#' wide_data <- convert_to_wide(long_data)
+#' head(wide_data)
+convert_to_wide <- function(tibble) {
+  # Convert long format to wide format
+  wide_data <- tibble %>%
+    spread(sample, expression_value)
+  
+  return(wide_data)
 }
+
+
