@@ -50,9 +50,7 @@ load_expression <- function(filepath) {
 #' filters like this serve to reduce the noise and amount of data to examine.
 #'
 #' @examples `samples <- filter_15(data_tib)`
-#' `> str(samples)`
-#' `tibble [40,158 × 1] (S3: tbl_df/tbl/data.frame)`
-#' `$ probe: chr [1:40158] "1007_s_at" "1053_at" "117_at" "121_at" ...`
+#' 
 filter_15 <- function(tibble){
   return(NULL)
 }
