@@ -114,7 +114,7 @@ script with high quality visual aesthetics. Do not use default ggplot colors.
 <!-- TODO: Add a figure -->
 ```{r}
 # use source to load your functions from main.R into this document.
-source("~/Desktop/main.R")
+source("main.R")
 library(tidyverse)
 ```
 ## Loading CSV with `load_expression()`
