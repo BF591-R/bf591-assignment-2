@@ -114,16 +114,17 @@ script with high quality visual aesthetics. Do not use default ggplot colors.
 <!-- TODO: Add a figure -->
 ```{r}
 # use source to load your functions from main.R into this document.
-source("main.R")
+source("~/Desktop/main.R")
+library(tidyverse)
 ```
 ## Loading CSV with `load_expression()`
 
 Importing data into R effectively is crucial. For our tasks, we prefer the tibble format, a modern representation of data frames in R. The `load_expression()` function is designed to address a specific challenge: our CSV's first column doesn't have a header. This function smoothly loads the data, assigning "probeids" to the first column, ensuring compatibility with tibbles.
 
 ```{r load_expression}
-library(tibble)
+
 # Load the expression data
-result_tib <- load_expression("/data/example_intensity_data_subset.csv")
+result_tib <- load_expression("data/example_intensity_data_subset.csv")
 head(result_tib) # Display the initial rows of the data
 ```
 ## Filtering Rows with `filter_15()`
@@ -134,7 +135,7 @@ While one might initially consider using traditional loops for row-wise operatio
 
 
 ```{r filter_15}
-test_tib <- tibble(probeids=c('1_s_at', '2_s_at', '3_s_at', '4_s_at'),
+test_tib <- tibble(probe=c('1_s_at', '2_s_at', '3_s_at', '4_s_at'),
                    GSM1=c(1.0, 3.95, 4.05, 0.5),
                    GSM2=rep(1.6, 4),
                    GSM3=rep(2.5, 4),
@@ -142,7 +143,7 @@ test_tib <- tibble(probeids=c('1_s_at', '2_s_at', '3_s_at', '4_s_at'),
                    GSM5=rep(3.0, 4),
                    GSM6=rep(1.0, 4),
                    GSM7=rep(0.5, 4))
-filtered_probes <- pull(filter_15(test_tib))
+filtered_probes <- c(filter_15(test_tib)$probe)
 filtered_probes # Display the probe IDs that meet the criteria
 ```
 
@@ -180,7 +181,7 @@ In the end, the output is a tibble streamlined to only the genes of interest, wi
 
 ```{r reduce_data}
 # Sample data and gene lists
-expression_data <- tibble(probeids = c("1_s_at", "2_s_at", "3_s_at"),
+expression_data <- tibble(probe = c("1_s_at", "2_s_at", "3_s_at"),
                           GSM1 = c(9.5, 7.6, 5.5),
                           GSM2 = c(9.7, 7.2, 2.9),
                           GSM3 = c(6.9, 4.3, 6.8))
@@ -197,35 +198,30 @@ head(reduced_data) # Show the first few rows of the refined data
 
 ## Analysis of Gene Expressions
 
-In our analysis, we aim to visualize the gene expressions categorized as 'good' and 'bad'. Before visualizing, it's crucial to ensure our data is structured correctly. For our visualization, we need the data in a wide format, so we'll start by converting our data to this format.
+In our analysis, we aim to visualize the gene expressions categorized as 'good' and 'bad'. Before visualizing, it's crucial to ensure our data is structured correctly. For our visualization, we need the data in a long format, so we'll start by converting our data to this format.
 
 ### Convert Data Format
-First, we'll load the necessary libraries and the data:
+First, we'll generate a sample tibble that is in wide format, your function should properly convert it to long format.
 
 ```{r}
-library(tidyverse)  
 # Test on an artificial tibble matching the structure of the real one
-test_long <- tibble(probeids = c("probe1", "probe2"),
+test_wide <- tibble(probe = c("probe1", "probe2"),
                     hgnc = c("geneA", "geneB"),
                     gene_set = c("good", "bad"),
-                    sample1 = c(2.5, 3.0),
-                    sample2 = c(2.7, 3.2))
+                    GSM1 = c(2.5, 3.0),
+                    GSM2 = c(2.7, 3.2))
 
-wide_format_data <- convert_to_wide(test_long)
-head(wide_format_data)
+long_format_data <- convert_to_long(test_wide)
+head(long_format_data)
 ```
 ##Plotting the Boxplot
-Now, with our data in wide format, we can visualize the distribution of gene expressions for the 'good' and 'bad' gene sets. We'll use ggplot2 to create a boxplot:
+Now, with our data in long format, we can visualize the distribution of gene expressions for the 'good' and 'bad' gene sets. We'll use ggplot2 to create a boxplot:
 ```{r}
-library(tidyverse)  
-
-# Melting the data into a longer format for ggplot boxplot
-long_for_plotting <- wide_format_data %>%
-  gather(key = "sample", value = "expression_value", -probeids, -hgnc, -gene_set)
-
 library(ggplot2)
+# Melting the data into a longer format for ggplot boxplot
 
-ggplot(long_for_plotting, aes(x = gene_set, y = expression_value)) + 
+
+ggplot(long_format_data, aes(x = gene_set, y = value)) + 
   geom_boxplot(aes(fill = gene_set)) +
   labs(title = "Distribution of Gene Expressions", 
        x = "Gene Set", 

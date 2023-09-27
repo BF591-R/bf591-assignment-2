@@ -23,7 +23,7 @@ library(tidyverse)
 #### Loading and processing data ####
 #' Load Expression Data
 #'
-#' @param filepath A text st1pm on Thursdayring of the full filepath to the file to load.
+#' @param filepath A text string of the full filepath to the file to load.
 #'
 #' @return A tibble containing the data loaded from the CSV in `filepath`. 
 #' 
@@ -33,7 +33,7 @@ library(tidyverse)
 #' tibble correctly.
 #'
 #' @examples 
-#' `data <- load_expression('/project/bf528/project_1/data/example_intensity_data.csv')`
+#' `data <- load_expression('data/example_intensity_data_subset.csv')`
 load_expression <- function(filepath) {
   return(NULL)
 }
@@ -52,7 +52,7 @@ load_expression <- function(filepath) {
 #' @examples `samples <- filter_15(data_tib)`
 #' `> str(samples)`
 #' `tibble [40,158 × 1] (S3: tbl_df/tbl/data.frame)`
-#' `$ probeids: chr [1:40158] "1007_s_at" "1053_at" "117_at" "121_at" ...`
+#' `$ probe: chr [1:40158] "1007_s_at" "1053_at" "117_at" "121_at" ...`
 filter_15 <- function(tibble){
   return(NULL)
 }
@@ -112,7 +112,7 @@ affy_to_hgnc <- function(affy_vector) {
 #' `                           goodGenes, badGenes)`
 #' `> head(plot_tibble)`
 #' `A tibble: 6 × 38`
-#' `  probeids    hgnc    gene_set    GSM972389 ...`
+#' `  probe       hgnc    gene_set    GSM972389 ...`
 #' `  <chr>       <chr>   <chr>       <dbl>     ...`
 #' `1 202860_at   DENND4B good        7.16      ...`
 #' `2 204340_at   TMEM187 good        6.40      ...`
@@ -120,27 +120,24 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
   return(NULL)
 }
 
-#' Convert the tibble from long to wide format.
+#' Convert the tibble from wide to long format.
 #'
-#' @param tibble A tibble of expression data in long format with information about
+#' @param tibble A tibble of expression data in wide format with information about
 #' good and bad genes, gene names, sample names, and expression values.
 #'
-#' @return A tibble in wide format.
+#' @return A tibble in long format containing the same information.
 #'
 #' @details This function's primary objective is to reformat the tibble from a 
-#' long format, where there are separate columns for sample name and expression value, 
-#' to a wide format, where each column represents a sample.
+#' wide format, where there are separate columns for sample name and expression value, 
+#' to a long format, where each column represents a sample.
 #'
 #' @examples 
-#' # Assuming 'long_data' is your long-format tibble
-#' wide_data <- convert_to_wide(long_data)
-#' head(wide_data)
-convert_to_wide <- function(tibble) {
+#' # Assuming 'wide_data' is your wide-format tibble
+#' long_data <- convert_to_long(wide_data)
+#' head(long_data)
+convert_to_long <- function(tibble) {
   # Convert long format to wide format
-  wide_data <- tibble %>%
-    spread(sample, expression_value)
-  
-  return(wide_data)
+  return(NULL)
 }
 
 
