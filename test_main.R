@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 # if you change the name of your script, this line must be changed as well
-source("main.R")
+source("~/Desktop/main.R")
 library(testthat)
 
 test_that("loading csv works using load_expression()", {
@@ -35,7 +35,7 @@ test_that("affy ids can be converted to HGNC names properly using affy_to_hgnc()
       Sys.sleep(1)
       success <- TRUE
     })
-    if (attempt == 3) stop("Process halted. Function faced non-connection errors.")
+    if (attempt == 3) stop("Process halted. Function faced non-connection errors. Try again later.")
   }
   expect_equal(response$hgnc_symbol, c("MT-ND1", "MT-TI", "MT-TM", "MT-ND2"))
 })
@@ -77,8 +77,6 @@ test_that("convert_to_wide() correctly converts from long to wide format", {
   
   # Convert to wide format
   long_format <- convert_to_long(wide_tib)
-  
- 
   
   # Test if the converted wide format matches the expected tibble
   expect_equal(long_format, expected_tib)
